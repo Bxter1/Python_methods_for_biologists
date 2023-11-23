@@ -155,7 +155,7 @@ print('>' + header_1 + '\n' + ABC123)  #worked nice
 print('>' + header_1 + '\n' + ABC123 + '\n' + '>' + header_2 + '\n' + DEF456 + '\n' + '>' + header_3 + '\n' + HIJ789)  #Success now turn this into a file
 
 combined_fasta = open("Combined_Sequences", "w+")
-combined_fasta.write('>' + header_1 + '\n' + ABC123 + '\n' + '>' + header_2 + '\n' + DEF456 + '\n' + '>' + header_3 + '\n' + HIJ789)
+combined_fasta.write('>' + header_1 + '\n' + ABC123 + '\n' + '>' + header_2 + '\n' + DEF456 + '\n' + '>' + header_3 + '\n' + HIJ789)  #Could have written these in 3 lines too for code clarity
 combined_fasta.close()
 
 combined_fasta_see = open("Combined_Sequences", "r")
@@ -166,16 +166,19 @@ print(see_sequences)   #BIG SUCCESS#
 ### Writing multiple FASTA Files ###
 
 ABC123_create = open("ABC123", "w")
-ABC123_create.write(ABC123)
+ABC123_create.write('>' + "ABC123" + "\n" + ABC123)
 ABC123_create.close()
 
 DEF456_create = open("DEF456", "w")
-DEF456_create.write(DEF456)
+DEF456_create.write('>' + "DEF456" + "\n" + DEF456)
 DEF456_create.close()
 
 HIJ789_create = open("HIJ789", "w")
-HIJ789_create.write(HIJ789)
+HIJ789_create.write('>' + "HIJ789" + "\n" + HIJ789)
 HIJ789_create.close()
+
+# An alternative way is to use our header variable as the name
+# ABC_create = open(header_1 + ".fasta", "w")
 
 
 
