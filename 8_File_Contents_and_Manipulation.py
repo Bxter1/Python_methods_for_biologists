@@ -78,6 +78,8 @@ shutil.copytree("/Users/Brian/Desktop/RNA_seq_21", "/Users/Brian/Desktop/RNA_seq
 
 if os.path.exists("/Users/Brian/Desktop/RNA_seq_21/sequences/copies/sequence1_copy.txt"):
     print("The path exists")
+else:
+    print("The path does not exist")
 
 
 # ABILITY: Deleting a single file
@@ -93,6 +95,8 @@ os.rmdir("/Users/Brian/Desktop/RNA_seq_21/sequences/sample2")
 # ABILITY: Removing a directory and all of its files
 
 shutil.rmtree("/Users/Brian/Desktop/RNA_seq_21")
+
+shutil.rmtree("/Users/Brian/Desktop/RNA_seq_21_copy")
 
 
 # ABILITY: Listing folder contents
@@ -319,6 +323,7 @@ print(sys.argv) # lists program name and inputs
 
 # EXERCISE 1 - BINNING DNA SEQUENCES
 
+
 # Objective: Create a program that:
     # Creates 9 new folders
     # 1 for sequences 100-199 bases long
@@ -337,9 +342,9 @@ print(sys.argv) # lists program name and inputs
 
 import os
 
-os.mkdir("/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/dna_binning_exercise")
+os.mkdir("/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/8_dna_binning_exercise")
 
-base_path = "/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/dna_binning_exercise"
+base_path = "/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/8_dna_binning_exercise"
 
 subdirectories = ["100-199", "200-299", "300-399", "400-499", "500-599", "600-699", "700-799", "800-899", "900-999"]
 
@@ -348,6 +353,11 @@ for subdirectory in subdirectories:
 
 print("All subdirectories created!")
 
+
+# deleting folder I made with an outdated naming convention
+
+import shutil
+shutil.rmtree("/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/dna_binning_exercise")
 
 def DNA_creator(dna_name, length):
     bases = ['A', 'T', 'C', 'G']
@@ -432,7 +442,7 @@ def random_DNA_creator(dna_name, length):
     dna_sequence = "".join(random.choices(bases, k=length))
 
 # '+=' is an operator function for adding a value to a variable and then assigning the result back to the variable
-# it is known as teh addition assignment operator
+# it is known as the addition assignment operator
 
     if 100 <= length < 200:
         folder = "100-199"
@@ -488,6 +498,7 @@ random_DNA_creator("2nd_short_sequence", 250)
 
 
 # As step 1 I will find out the names of the files in the folder
+import os
 
 os.listdir(r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises")
 
@@ -497,8 +508,27 @@ os.listdir(r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologis
 
 # as step 2 I will create a loop which will go through files, open them in read mode and determine their length
 
+for file in os.listdir(r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"):
+    if file.endswith(".dna"):
+        with open(file, "r") as f:  # This method automatically closes the file after use
+            sequence = f.read()
+            length = len(sequence)
+            print(f"The length of {file} is {length} bases.") # This did not work!!!!
 
+# It didn't work because list directory lists the files in the folders but does not make it the current working directory
+# with open(file, "r") as f: reads from the current working directory
 
+folder = r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"
+
+for file in os.listdir(folder):
+    if file.endswith(".dna"):
+        full_path = os.path.join(folder, file)
+        with open(full_path, "r") as f:
+            sequence = f.read()
+            length = len(sequence)
+            print(f"the length of {file} is {length} bases.")
+
+# This worked!
 
 
 # As step 3 I will create the folders
@@ -516,4 +546,343 @@ for subdirectory in subdirectories:
 
 
 # As step 4 I will copy the files to the new directories based on their length
+
+import shutil
+
+source_folder = r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"
+destination_folder = "/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/dna_binning_exercise"
+
+for file in os.listdir(source_folder):
+    if file.endswith(".dna"):
+        full_path = os.path.join(source_folder, file)
+        with open(full_path, "r") as f:
+            sequence = f.read()
+            length = len(sequence)
+            if 100 <= length < 999:
+                shutil.copy(full_path, os.path.join(destination_folder, "100-199"))
+            elif 1000 <= length < 1999:
+                shutil.copy(full_path, os.path.join(destination_folder, "200-299"))
+            elif 2000 <= length < 2999:
+                shutil.copy(full_path, os.path.join(destination_folder, "300-399"))
+            elif 3000 <= length < 3999:
+                shutil.copy(full_path, os.path.join(destination_folder, "400-499"))
+            elif 4000 <= length < 4999:
+                shutil.copy(full_path, os.path.join(destination_folder, "500-599"))
+            elif 5000 <= length < 5999:
+                shutil.copy(full_path, os.path.join(destination_folder, "600-699"))
+            elif 6000 <= length < 6999:
+                shutil.copy(full_path, os.path.join(destination_folder, "700-799"))
+            elif 7000 <= length < 7999:
+                shutil.copy(full_path, os.path.join(destination_folder, "800-899"))
+            elif 8000 <= length < 8999:
+                shutil.copy(full_path, os.path.join(destination_folder, "900-999"))
+
+# This worked!
+# Files had a lot more characters than I expected so changed by a factor of 10
+# The files are also shifted by one row but that's fine for the example
+# A print statement after each saying how long the file is would have been nice
+
+# Implementing now with print statements
+
+import shutil
+
+source_folder = r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"
+destination_folder = "/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/dna_binning_exercise"
+
+for file in os.listdir(source_folder):
+    if file.endswith(".dna"):
+        full_path = os.path.join(source_folder, file)
+        with open(full_path, "r") as f:
+            sequence = f.read()
+            length = len(sequence)
+            print(f"The length of {file} is {length} bases.")
+            if 100 <= length < 999:
+                shutil.copy(full_path, os.path.join(destination_folder, "100-199"))
+            elif 1000 <= length < 1999:
+                shutil.copy(full_path, os.path.join(destination_folder, "200-299"))
+            elif 2000 <= length < 2999:
+                shutil.copy(full_path, os.path.join(destination_folder, "300-399"))
+            elif 3000 <= length < 3999:
+                shutil.copy(full_path, os.path.join(destination_folder, "400-499"))
+            elif 4000 <= length < 4999:
+                shutil.copy(full_path, os.path.join(destination_folder, "500-599"))
+            elif 5000 <= length < 5999:
+                shutil.copy(full_path, os.path.join(destination_folder, "600-699"))
+            elif 6000 <= length < 6999:
+                shutil.copy(full_path, os.path.join(destination_folder, "700-799"))
+            elif 7000 <= length < 7999:
+                shutil.copy(full_path, os.path.join(destination_folder, "800-899"))
+
+
+
+# While this worked *******
+
+# We may have been including new line characters
+# As well there were different sequences in each dna file which my method did not differentiate
+# It treated each dna file as one sequence
+# Here is the solution offered by the book
+
+import os
+
+source_folder = r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"
+
+for file_name in os.listdir(source_folder):
+    if file_name.endswith(".dna"):
+        print("reading sequences from " + file_name)
+        full_path = os.path.join(source_folder, file_name)
+        dna_file = open(full_path)
+
+        # Look at each line
+        for line in dna_file:
+            dna = line.rstrip("\n")
+            length = len(dna)
+            print("found a dna sequence with a length of " + str(length))
+
+        # This now lists each file and says how long each sequence is within each file
+        # go through each bin and check if the sequence belongs in it
+
+            for bin_lower in range(100, 1000, 100):
+                bin_upper = bin_lower + 99
+                if length >= bin_lower and length <= bin_upper:
+                    print("bin is " + str(bin_lower) + " to " + str(bin_upper))
+
+
+# Now that this works and lists which bin each dna fragment belongs to let's now create functions to clean the code
+
+
+source_folder = r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"
+destination_folder = "/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/dna_binning_exercise"
+
+
+def process_sequence(line):
+    dna = line.rstrip("\n")
+    length = len(dna)
+    print("sequence length is " + str(length))
+    for bin_lower in range(100,1000,100):
+        bin_upper = bin_lower + 99
+        if length >= bin_lower and length < bin_upper:
+            print("bin is " + str(bin_lower) + " to " + str(bin_upper))
+
+for file_name in os.listdir(source_folder):
+    if file_name.endswith(".dna"):
+        print("reading sequence from " + file_name)
+        dna_file = open(file_name)
+        for line in dna_file:
+            process_sequence(line) # A recursive function!
+
+# Now we create folders to add them too using our bin function
+
+for bin_lower in range(100,1000,100):
+    bin_upper = bin_lower + 99
+    bin_folder_name = str(bin_lower) + "_" + str(bin_upper)
+    bin_folder_path = os.path.join(destination_folder, bin_folder_name)
+    os.mkdir(bin_folder_name)
+
+# This works out the folder naming scheme
+# DNA file naming is not specified so we can name 1.dna, 2.dna and so on
+# We need to create an extra variable to hold the number of dna sequences we've seen and
+# increment after writing each dna sequence
+
+
+# All together now
+
+source_folder = r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"
+destination_folder = "/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/dna_binning_exercise"
+
+
+# Creating folders for each bin to go into
+
+for bin_lower in range(100,1000,100):
+    bin_upper = bin_lower + 99
+    bin_folder_name = str(bin_lower) + "_" + str(bin_upper)
+    bin_folder_path = os.path.join(destination_folder, bin_folder_name)
+    os.mkdir(bin_folder_path)
+
+
+# A function to process each sequence
+# This function analyses the length of the sequence and then writes it to the correct folder
+# This top portion of the function describes where the function is written to
+# I am creating one file per line of each .dna file
+def process_sequence(line):
+    dna = line.rstrip("\n")
+    length = len(dna)
+    print("sequence length is " + str(length))
+    for bin_lower in range(100,1000,100):
+        bin_upper = bin_lower + 99
+        if length >= bin_lower and length < bin_upper:
+            print("bin is " + str(bin_lower) + " to " + str(bin_upper))
+            bin_folder_name = str(bin_lower) + "_" + str(bin_upper)
+            bin_folder_path = os.path.join(destination_folder, bin_folder_name)
+            output_path = bin_folder_path + '/' + str(seq_number) + '.dna'
+
+            output = open(output_path, "w")
+            output.write(dna)
+            output.close()
+
+# This bottom portion directs where the contents are taken from
+
+seq_number = 1
+for file_name in os.listdir(source_folder):
+    if file_name.endswith(".dna"):
+        print("reading sequence from " + file_name)
+        full_path = os.path.join(source_folder, file_name)
+        dna_file = open(full_path)
+        for line in dna_file:
+            process_sequence(line)
+            seq_number = seq_number + 1
+
+# This works!!
+
+
+
+# EXERCISE 2  !!!!!!!!!!!!!!!!!!
+
+# Kmer Counting
+
+# Write a program which will calculate the amount of Kmers of a given length across all dna sequences in the input files
+# Display only the ones that appear more than a given amount of times
+# should take two arguments
+# The Kmer length and the cut-off value
+
+
+# Plan
+
+# 1: Read the files out line by line
+# 2: For each string break it into kmers of a given length
+# 3: Search through the kmers and count them
+# 4: Print the kmers that appear more than a given amount of times
+
+
+# part 1: reading the files line by line and using the function "kmer_analyser" on each line
+
+source_folder = r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"
+destination_folder = "/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/kmer_exercise"
+
+for file_name in os.listdir(source_folder):
+    if file_name.endswith(".dna"):
+        print("reading sequence from " + file_name)
+        full_path = os.path.join(source_folder, file_name)
+        dna_file = open(full_path)
+        for line in dna_file:
+            kmer_analyser(line)
+
+
+# part 2: kmer_analyser function
+
+def kmer_analyser(line, length):
+    dna_file = line.rstrip("\n")
+    kmer_list = []
+    for i in range(len(dna_file) - length + 1):
+        kmer = dna_file[i:i+length]
+        kmer_list.append(kmer)
+    kmer_counter = Counter(kmer_list)
+    print(kmer_counter.most_common(10))
+
+
+# The solution to the exercise
+
+# It starts with a test sequence of DNA before looking through the files
+# This is a good practice to start simple first
+
+test_dna = "ACTGTAGCTGTACGTAGC"
+print(test_dna)
+kmer_size = 4
+for start in range(0,len(test_dna) - kmer_size + 1,1):
+    kmer = test_dna[start:start+kmer_size]
+    print(kmer)
+
+# With this range function we go though the dna increasing by 1 each time
+# We also stop at the length with 1 kmer left rather than finishing with 3mers or less
+
+# Turning it into a function
+
+def kmer_analyser(given_dna, kmer_size):
+    kmers = []
+    for start in range(0, len(given_dna) - kmer_size + 1,1):
+        kmer = given_dna[start:start+kmer_size]
+        kmers.append(kmer)
+    return kmers
+
+given_dna = "ACTGTAGCTGTACGTAGC"
+
+kmer_analyser(given_dna, 4)
+kmer_analyser(given_dna, 7)
+kmer_analyser(given_dna, 2)
+
+
+# Now combine with the looping through files
+# We will create an empty dict
+# Each kmer we find we will look up the current count for it in the dict
+# If not in the dict, we say the current count is 0, add to the count, then store back in the dict
+
+
+import os
+kmer_size = 6
+source_folder = r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"
+destination_folder = "/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/kmer_exercise"
+
+
+
+def split_dna(dna, kmer_size):
+    kmers = []
+    for start in range(0, len(given_dna) - kmer_size + 1,1):
+        kmer = given_dna[start:start+kmer_size]
+        kmers.append(kmer)
+    return kmers
+
+kmer_counts = {}
+for file_name in os.listdir(source_folder):
+    if file_name.endswith(".dna"):
+        print("reading sequences from " + file_name)
+        full_path = os.path.join(source_folder, file_name)
+        dna_file = open(full_path)
+        for line in dna_file:
+            dna = line.rstrip("\n")
+            for kmer in split_dna(dna, kmer_size):
+                current_count = kmer_counts.get(kmer, 0)
+                new_count = current_count + 1
+                kmer_counts[kmer] = new_count
+
+print(kmer_counts)
+
+# This is just printing 100 for each which should not be the case
+
+import os
+kmer_size = 6
+source_folder = r"C:\Users\Brian\Documents\Bioinformatics_general\Python_for_Biologists_files_all\p4b_exercises\exercises_and_examples\working_with_the_filesystem\exercises"
+destination_folder = "/Users/Brian/Documents/Bioinformatics_general/Python_for_biologists/kmer_exercise"
+
+
+
+def split_dna(dna, kmer_size):
+    kmers = []
+    for start in range(0, len(given_dna) - kmer_size + 1,1):
+        kmer = given_dna[start:start+kmer_size]
+        kmers.append(kmer)
+    return kmers
+
+kmer_counts = {}
+for file_name in os.listdir(source_folder):
+    if file_name.endswith(".dna"):
+        print("reading sequences from " + file_name)
+        full_path = os.path.join(source_folder, file_name)
+        with open(full_path, 'r') as dna_file:
+            line_number = 0
+            for line in dna_file:
+                line_number += 1
+                print(f"File: {file_name}, Line: {line_number}")
+                dna = line.rstrip("\n")
+                for kmer in split_dna(dna, kmer_size):
+                    current_count = kmer_counts.get(kmer, 0)
+                    new_count = current_count + 1
+                    kmer_counts[kmer] = new_count
+
+print(kmer_counts)
+
+
+
+
+
+
+
 
